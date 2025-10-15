@@ -1,11 +1,7 @@
-# Imagen base de Python 3.10
+# Imagen base de Python 3.10 (ligera y estable)
 FROM python:3.10-slim
 
-# Variables de entorno base
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Instalar dependencias del sistema necesarias para librerías como weasyprint, magic y reportlab
+# Instalar dependencias del sistema necesarias para algunas librerías
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libmagic1 \
@@ -18,39 +14,33 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
 
-# Crear el directorio del proyecto
+# Crear directorio de la app
 WORKDIR /app
 
-# Copiar los requerimientos
+# Copiar archivos de requerimientos e instalarlos
 COPY requirements.txt /app/
-
-# Instalar dependencias de Python
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copiar el resto del proyecto
+# Copiar todo el proyecto
 COPY . /app
 
-# --- Crear archivo Python para el superusuario automático ---
+# Generar script de creación automática del superusuario
 RUN printf "%s\n" \
 "from django.contrib.auth import get_user_model" \
 "import os" \
 "User = get_user_model()" \
 "email = os.getenv('ADMIN_EMAIL', 'admin@example.com')" \
 "password = os.getenv('ADMIN_PASS', 'admin123')" \
-"nombres = os.getenv('ADMIN_NAME', 'Administrador')" \
-"apellidos = os.getenv('ADMIN_LAST', 'Principal')" \
 "if not User.objects.filter(email=email).exists():" \
-"    User.objects.create_superuser(email=email, password=password, nombres=nombres, apellidos=apellidos)" \
-"    print(f'✅ Superusuario creado con email: {email}')" \
+"    User.objects.create_superuser(email=email, password=password, nombres='Admin', apellidos='Root')" \
+"    print(f'✅ Superusuario creado: {email}')" \
 "else:" \
-"    print(f'ℹ️ El superusuario con email {email} ya existe')" \
-> create_superuser.py
+"    print(f'ℹ️ El superusuario {email} ya existe')" > create_superuser.py
 
-# Exponer el puerto 8000
-EXPOSE 8000
-
-# Comando de inicio del contenedor
-CMD bash -c "python manage.py migrate --noinput && \
+# Recolectar estáticos y ejecutar migraciones
+RUN python manage.py migrate --noinput && \
     python manage.py collectstatic --noinput && \
-    python manage.py shell < create_superuser.py && \
-    gunicorn easycert.wsgi:application --bind 0.0.0.0:8000"
+    python manage.py shell < create_superuser.py
+
+# Comando de inicio (ligero y optimizado)
+CMD gunicorn easycert.wsgi:application --bind 0.0.0.0:$PORT --workers=2 --threads=2 --timeout=120

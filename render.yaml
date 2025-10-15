@@ -4,27 +4,19 @@ services:
     env: docker
     plan: free
     autoDeploy: true
-    branch: main
+    region: oregon
+    buildCommand: ""
+    startCommand: gunicorn easycert.wsgi:application --workers=2 --threads=2 --timeout=120
     envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: easycert.settings
-      - key: PYTHON_VERSION
-        value: 3.10.13
-      - key: SECRET_KEY
-        sync: false
       - key: DEBUG
         value: False
-      - key: DB_NAME
-        sync: false
-      - key: DB_USER
-        sync: false
-      - key: DB_PASSWORD
-        sync: false
-      - key: DB_HOST
-        sync: false
-      - key: DB_PORT
-        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: quirajh@gmail.com
+      - key: ADMIN_PASS
+        value: admin123
       - key: EMAIL_HOST_USER
-        sync: false
+        value: juanbaldes6969@gmail.com
       - key: EMAIL_HOST_PASSWORD
-        sync: false
+        sync: false  # ⚠️ debes configurarla manualmente en el panel de Render (ver abajo)

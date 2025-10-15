@@ -2,167 +2,169 @@
 {% block content %}
 {% load static %}
 
-<div class="container mx-auto flex justify-center items-center min-h-screen px-4 bg-light">
-  <div class="card shadow-lg border-0 rounded-lg p-6 w-full max-w-3xl">
+<div class="min-h-screen flex justify-center items-center bg-gray-50 px-4 py-8">
+  <div class="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-8">
     
-    <h3 class="text-center text-2xl font-semibold mb-6">Registro</h3>
+    <!-- Título -->
+    <div class="text-center mb-8">
+      <i class="fas fa-user-plus text-blue-600 text-3xl mb-2"></i>
+      <h2 class="text-2xl font-bold text-gray-800">Registro</h2>
+      <p class="text-gray-500 text-sm">Crea tu cuenta para acceder al sistema</p>
+    </div>
 
-    <form method="post" class="space-y-4">
+    <form method="post" class="space-y-6">
       {% csrf_token %}
       {{ form.non_field_errors }}
 
       <!-- Nombres y Apellidos -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-          <div class="mb-3">
-            {{ form.nombres.label_tag }}
-            {{ form.nombres }}
-            {% if form.nombres.errors %}
-              <div class="text-red-500 text-sm mt-1">{{ form.nombres.errors }}</div>
-            {% endif %}
-          </div>
+          {{ form.nombres.label_tag }}
+          <div class="mt-1">{{ form.nombres }}</div>
         </div>
-
         <div>
-          <div class="mb-3">
-            {{ form.apellidos.label_tag }}
-            {{ form.apellidos }}
-            {% if form.apellidos.errors %}
-              <div class="text-red-500 text-sm mt-1">{{ form.apellidos.errors }}</div>
-            {% endif %}
-          </div>
+          {{ form.apellidos.label_tag }}
+          <div class="mt-1">{{ form.apellidos }}</div>
         </div>
       </div>
 
       <!-- Documento -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-          <div class="mb-3">
-            {{ form.tipo_documento.label_tag }}
-            {{ form.tipo_documento }}
-            {% if form.tipo_documento.errors %}
-              <div class="text-red-500 text-sm mt-1">{{ form.tipo_documento.errors }}</div>
-            {% endif %}
-          </div>
+          {{ form.tipo_documento.label_tag }}
+          <div class="mt-1">{{ form.tipo_documento }}</div>
         </div>
-
         <div>
-          <div class="mb-3">
-            {{ form.numero_documento.label_tag }}
-            {{ form.numero_documento }}
-            {% if form.numero_documento.errors %}
-              <div class="text-red-500 text-sm mt-1">{{ form.numero_documento.errors }}</div>
-            {% endif %}
-          </div>
+          {{ form.numero_documento.label_tag }}
+          <div class="mt-1">{{ form.numero_documento }}</div>
         </div>
       </div>
 
       <!-- Selects dinámicos -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-          <div class="mb-3">
-            {{ form.departamento.label_tag }}
-            {{ form.departamento }}
-            {% if form.departamento.errors %}
-              <div class="text-red-500 text-sm mt-1">{{ form.departamento.errors }}</div>
-            {% endif %}
-          </div>
+          {{ form.departamento.label_tag }}
+          <div class="mt-1">{{ form.departamento }}</div>
         </div>
-
         <div>
-          <div class="mb-3">
-            {{ form.centro.label_tag }}
-            {{ form.centro }}
-            {% if form.centro.errors %}
-              <div class="text-red-500 text-sm mt-1">{{ form.centro.errors }}</div>
-            {% endif %}
-          </div>
+          {{ form.centro.label_tag }}
+          <div class="mt-1">{{ form.centro }}</div>
         </div>
       </div>
 
       <!-- Email -->
       <div>
-        <div class="mb-3">
-          {{ form.email.label_tag }}
-          {{ form.email }}
-          {% if form.email.errors %}
-            <div class="text-red-500 text-sm mt-1">{{ form.email.errors }}</div>
-          {% endif %}
-        </div>
+        {{ form.email.label_tag }}
+        <div class="mt-1">{{ form.email }}</div>
       </div>
 
       <!-- Password -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-          <div class="mb-3">
-            {{ form.password1.label_tag }}
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-              <div class="text-red-500 text-sm mt-1">{{ form.password1.errors }}</div>
-            {% endif %}
-            <div class="text-sm text-gray-500"><i class="fas fa-info-circle me-1"></i>Mínimo 8 caracteres, con letras y números</div>
-          </div>
+          {{ form.password1.label_tag }}
+          <div class="mt-1">{{ form.password1 }}</div>
+          <p class="text-sm text-gray-500 mt-1 flex items-center gap-1">
+            <i class="fas fa-info-circle"></i> Mínimo 8 caracteres, con letras y números
+          </p>
         </div>
-
         <div>
-          <div class="mb-3">
-            {{ form.password2.label_tag }}
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-              <div class="text-red-500 text-sm mt-1">{{ form.password2.errors }}</div>
-            {% endif %}
-            <div class="text-sm text-gray-500"><i class="fas fa-info-circle me-1"></i>Repite la misma contraseña</div>
-          </div>
+          {{ form.password2.label_tag }}
+          <div class="mt-1">{{ form.password2 }}</div>
+          <p class="text-sm text-gray-500 mt-1 flex items-center gap-1">
+            <i class="fas fa-info-circle"></i> Repite la misma contraseña
+          </p>
         </div>
       </div>
 
       <!-- Botón -->
       <div>
-        <div class="d-grid mb-4">
-          <button type="submit" class="btn btn-success w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">
-            <i class="fas fa-user-plus me-2"></i>Registrarse
-          </button>
-        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 transition duration-150 flex justify-center items-center gap-2">
+          <i class="fas fa-user-plus"></i> Registrarse
+        </button>
       </div>
     </form>
 
     <!-- Link login -->
-    <div class="text-center mt-3">
-      <p class="mb-0">
-        <a href="{% url 'login' %}" class="text-blue-500 hover:text-blue-700">
-          <i class="fas fa-sign-in-alt me-1"></i>¿Ya tienes cuenta? Inicia sesión
-        </a>
-      </p>
+    <div class="text-center mt-6">
+      <a href="{% url 'login' %}" class="text-blue-500 hover:text-blue-700 flex justify-center items-center gap-1">
+        <i class="fas fa-sign-in-alt"></i>
+        ¿Ya tienes cuenta? Inicia sesión
+      </a>
     </div>
-
   </div>
 </div>
 
+<!-- 🎨 Estilos de inputs bonitos y sin fondo gris feo -->
+<style>
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  select {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    transition: all 0.2s ease;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    outline: none;
+  }
+
+  input[type="text"]:hover,
+  input[type="email"]:hover,
+  input[type="password"]:hover,
+  select:hover {
+    border-color: #3b82f6;
+  }
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  /* ⚡ Quitar fondo gris de autocompletado */
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    -webkit-text-fill-color: #000 !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+</style>
+
 <!-- Script para selects dinámicos -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const deptoSelect = document.getElementById("id_departamento");
-        const centroSelect = document.getElementById("id_centro");
+  document.addEventListener("DOMContentLoaded", function() {
+    const deptoSelect = document.getElementById("id_departamento");
+    const centroSelect = document.getElementById("id_centro");
 
-        deptoSelect.addEventListener("change", function() {
-            const deptoId = this.value;
-            if (deptoId) {
-                fetch(`/users/cargar-centros/?departamento=${deptoId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        centroSelect.innerHTML = '<option value="">-- Selecciona un centro --</option>';
-                        data.forEach(item => {
-                            const option = document.createElement("option");
-                            option.value = item.idMpio;
-                            option.textContent = item.nombreCentro;
-                            centroSelect.appendChild(option);
-                        });
-                    });
-            } else {
-                centroSelect.innerHTML = '<option value="">-- Selecciona un centro --</option>';
-            }
-        });
+    deptoSelect.addEventListener("change", function() {
+      const deptoId = this.value;
+      if (deptoId) {
+        fetch(`/users/cargar-centros/?departamento=${deptoId}`)
+          .then(response => response.json())
+          .then(data => {
+            centroSelect.innerHTML = '<option value="">-- Selecciona un centro --</option>';
+            data.forEach(item => {
+              const option = document.createElement("option");
+              option.value = item.idMpio;
+              option.textContent = item.nombreCentro;
+              centroSelect.appendChild(option);
+            });
+          });
+      } else {
+        centroSelect.innerHTML = '<option value="">-- Selecciona un centro --</option>';
+      }
     });
+  });
 </script>
 
 {% endblock %}

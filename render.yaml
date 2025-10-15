@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: easycert
+    env: docker
+    plan: free
+    autoDeploy: true
+    branch: main
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: easycert.settings
+      - key: PYTHON_VERSION
+        value: 3.10.13
+      - key: SECRET_KEY
+        sync: false
+      - key: DEBUG
+        value: False
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false

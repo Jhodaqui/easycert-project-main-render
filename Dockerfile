@@ -21,8 +21,7 @@ WORKDIR /app
 COPY requirements.txt /app/
 
 # Instalar dependencias Python
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copiar el proyecto completo
 COPY . /app
@@ -31,30 +30,22 @@ COPY . /app
 ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=easycert.settings
 
-# --- Crear script para superusuario automático ---
+# Script para crear superusuario automáticamente
 RUN echo "from django.contrib.auth import get_user_model; \
 import os; \
 User = get_user_model(); \
 username = os.getenv('ADMIN_USER', 'admin'); \
 email = os.getenv('ADMIN_EMAIL', 'admin@example.com'); \
 password = os.getenv('ADMIN_PASS', 'admin123'); \
-\
 u = User.objects.filter(username=username); \
-\
 if not u.exists(): \
     User.objects.create_superuser(username=username, email=email, password=password); \
     print('✅ Superusuario creado:', username); \
 else: \
-    print('ℹ️ El superusuario ya existe:', username)" \
-> create_superuser.py
+    print('ℹ️ El superusuario ya existe:', username)" > create_superuser.py
 
-# Puerto de salida
+# Exponer puerto
 EXPOSE 8000
 
-# Comando de inicio automatizado
-CMD bash -c "
-python manage.py migrate --noinput &&
-python manage.py collectstatic --noinput &&
-python manage.py shell < create_superuser.py &&
-gunicorn easycert.wsgi:application --bind 0.0.0.0:8000 --workers 3
-"
+# Comando de inicio (todo en una sola línea)
+CMD bash -c "python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py shell < create_superuser.py && gunicorn easycert.wsgi:application --bind 0.0.0.0:8000 --workers 3"

@@ -30,22 +30,23 @@ COPY . /app
 ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=easycert.settings
 
-# Script para crear superusuario automáticamente
-RUN echo "from django.contrib.auth import get_user_model; \
-import os; \
-User = get_user_model(); \
-username = os.getenv('ADMIN_USER', 'admin'); \
-email = os.getenv('ADMIN_EMAIL', 'admin@example.com'); \
-password = os.getenv('ADMIN_PASS', 'admin123'); \
-u = User.objects.filter(username=username); \
-if not u.exists(): \
-    User.objects.create_superuser(username=username, email=email, password=password); \
-    print('✅ Superusuario creado:', username); \
-else: \
-    print('ℹ️ El superusuario ya existe:', username)" > create_superuser.py
+# --- Crear archivo Python para el superusuario automático ---
+RUN printf "%s\n" \
+"from django.contrib.auth import get_user_model" \
+"import os" \
+"User = get_user_model()" \
+"username = os.getenv('ADMIN_USER', 'admin')" \
+"email = os.getenv('ADMIN_EMAIL', 'admin@example.com')" \
+"password = os.getenv('ADMIN_PASS', 'admin123')" \
+"if not User.objects.filter(username=username).exists():" \
+"    User.objects.create_superuser(username=username, email=email, password=password)" \
+"    print(f'✅ Superusuario creado: {username}')" \
+"else:" \
+"    print(f'ℹ️ El superusuario {username} ya existe')" \
+> create_superuser.py
 
 # Exponer puerto
 EXPOSE 8000
 
-# Comando de inicio (todo en una sola línea)
+# Comando de inicio automatizado
 CMD bash -c "python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py shell < create_superuser.py && gunicorn easycert.wsgi:application --bind 0.0.0.0:8000 --workers 3"

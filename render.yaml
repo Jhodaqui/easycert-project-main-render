@@ -5,8 +5,11 @@ services:
     plan: free
     autoDeploy: true
     region: oregon
+
+    # Render detectará el Dockerfile automáticamente
     buildCommand: ""
-    startCommand: gunicorn easycert.wsgi:application --workers=2 --threads=2 --timeout=120
+    startCommand: bash -c "python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py shell < create_superuser.py && gunicorn easycert.wsgi:application --bind 0.0.0.0:$PORT --workers=2 --threads=2 --timeout=120"
+
     envVars:
       - key: DEBUG
         value: False
@@ -16,7 +19,21 @@ services:
         value: quirajh@gmail.com
       - key: ADMIN_PASS
         value: admin123
+
+      # Configuración del correo (usará tu Gmail)
       - key: EMAIL_HOST_USER
         value: juanbaldes6969@gmail.com
       - key: EMAIL_HOST_PASSWORD
-        sync: false  # ⚠️ debes configurarla manualmente en el panel de Render (ver abajo)
+        sync: false  # ⚠️ agrégala manualmente desde el panel Render
+
+      # Datos de conexión a la base de datos (Render te da estos valores al crear la DB)
+      - key: DB_NAME
+        value: easycert_db_kk0n
+      - key: DB_USER
+        value: easycert_db_kk0n_user
+      - key: DB_PASSWORD
+        sync: false  # agrega la contraseña manualmente en el panel
+      - key: DB_HOST
+        value: dpg-d3nivlfdiees73doj3r0-a.oregon-postgres.render.com
+      - key: DB_PORT
+        value: "5432"

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="constancia-container">
+  <div class="constancia-card">
+    <h2 class="constancia-title">BIENVENIDO AL SISTEMA DE GENERACION DE CONSTANCIAS</h2>
+    <p class="constancia-subtitle">Solicita tu Constancia aquí!!</p>
+
+    <form method="post" id="constanciaForm" class="constancia-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+<div class="form-group">
+  <label><strong>Nombre:</strong> <span>{{ form.nombre_completo.value }}</span></label>
+</div>
+
+<div class="form-group">
+  <label><strong>Documento:</strong> <span>{{ form.numero_documento.value }}</span></label>
+</div>
+
+<div class="form-group">
+  <label><strong>Correo electrónico:</strong> <span>{{ form.email.value }}</span></label>
+</div>
+
+ 
+    <div style="display: flex; gap: 1rem;">
+      <div class="form-group" style="flex: 1;">
+      {{ form.fecha_inicial.label_tag }}
+      {{ form.fecha_inicial }}
+      {{ form.fecha_inicial.errors }}
+      </div>
+
+  <div class="form-group" style="flex: 1;">
+    {{ form.fecha_final.label_tag }}
+    {{ form.fecha_final }}
+    {{ form.fecha_final.errors }}
+  </div>
+</div>
+        <div class="form-group">
+        {{ form.comentario }}
+        {{ form.comentario.errors }}
+
+      <div class="form-group">
+        {{ form.tipo_constancia }}
+        {{ form.tipo_constancia.errors }}
+      </div>
+
+      <button type="submit" class="btn-submit">Solicitar</button>
+      <a href="{% url 'user_dashboard' %}" class="btn-ingresar">Volver</a>
+    </form>
+  </div>
+{% endblock %}

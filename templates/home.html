@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .welcome-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 40px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .welcome-icon {
+        font-size: 64px;
+        color: #4a6cf7;
+        margin-bottom: 20px;
+    }
+    
+    .welcome-title {
+        color: #2d3748;
+        margin-bottom: 15px;
+        font-weight: 700;
+        font-size: 32px;
+    }
+    
+    .welcome-subtitle {
+        color: #4a5568;
+        margin-bottom: 30px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+    
+    .user-info-card {
+        background: linear-gradient(135deg, #f7f9fc 0%, #edf2f7 100%);
+        border-radius: 10px;
+        padding: 25px;
+        margin: 30px 0;
+        text-align: left;
+        border-left: 4px solid #4a6cf7;
+    }
+    
+    .info-item {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .info-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .info-icon {
+        width: 30px;
+        color: #4a6cf7;
+        font-size: 18px;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #4a5568;
+        min-width: 120px;
+    }
+    
+    .info-value {
+        color: #2d3748;
+        font-weight: 500;
+    }
+    
+    .logout-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(229, 62, 62, 0.3);
+        margin-top: 20px;
+    }
+    
+    .logout-btn:hover {
+        background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(229, 62, 62, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .logout-btn i {
+        margin-right: 8px;
+    }
+    
+    .quick-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #edf2f7;
+        color: #4a5568;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .action-btn:hover {
+        background-color: #e2e8f0;
+        color: #2d3748;
+        text-decoration: none;
+    }
+    
+    .action-btn i {
+        margin-right: 6px;
+    }
+    
+    @media (max-width: 768px) {
+        .welcome-container {
+            margin: 20px;
+            padding: 30px 20px;
+        }
+        
+        .welcome-title {
+            font-size: 28px;
+        }
+        
+        .user-info-card {
+            padding: 20px;
+        }
+        
+        .info-item {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            margin-bottom: 5px;
+        }
+        
+        .quick-actions {
+            flex-direction: column;
+        }
+        
+        .action-btn {
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="welcome-container">
+    <div class="welcome-icon">
+        <i class="fas fa-user-check"></i>
+    </div>
+    
+    <h2 class="welcome-title">¡Bienvenido, {{ request.user.nombre_completo }}!</h2>
+    <p class="welcome-subtitle">Gracias por acceder a tu cuenta de EasyCert</p>
+    
+    <div class="user-info-card">
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="fas fa-id-card"></i>
+            </div>
+            <span class="info-label">Tipo documento:</span>
+            <span class="info-value">{{ request.user.tipo_documento }}</span>
+        </div>
+        
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="fas fa-hashtag"></i>
+            </div>
+            <span class="info-label">Número documento:</span>
+            <span class="info-value">{{ request.user.numero_documento }}</span>
+        </div>
+        
+        <div class="info-item">
+            <div class="info-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="info-label">Correo electrónico:</span>
+            <span class="info-value">{{ request.user.email }}</span>
+        </div>
+    </div>
+    
+    <div class="quick-actions">
+        <a href="#" class="action-btn">
+            <i class="fas fa-user-edit"></i>Editar perfil
+        </a>
+        <a href="#" class="action-btn">
+            <i class="fas fa-key"></i>Cambiar contraseña
+        </a>
+        <a href="#" class="action-btn">
+            <i class="fas fa-certificate"></i>Mis certificados
+        </a>
+    </div>
+    
+    <a href="{% url 'logout' %}" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>Cerrar sesión
+    </a>
+</div>
+
+<!-- Font Awesome para los iconos -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% comment %} {% extends "base.html" %}
+{% block content %}
+<h2>Bienvenido, {{ request.user.nombre_completo }}</h2>
+<p>Tipo doc: {{ request.user.tipo_documento }} - Número: {{ request.user.numero_documento }}</p>
+<p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
+{% endblock %} {% endcomment %}

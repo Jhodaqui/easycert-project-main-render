@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Subir PDF de {{ usuario.nombre_completo }}</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="pdf_file" required>
+  <button type="submit">Procesar PDF</button>
+</form>
+{% endblock %}

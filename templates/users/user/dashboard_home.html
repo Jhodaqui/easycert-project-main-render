@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - Usuario{% endblock %}
+{% block content %}
+<div class="min-h-screen flex flex-col bg-gray-50">
+
+  <!-- Header -->
+  <nav class="flex items-center justify-between bg-gray-900 px-6 py-3">
+    <div class="flex items-center gap-2">
+      <img src="/static/img/EasyCert" alt="EasyCert Logo" class="h-10">
+      <span class="text-white font-bold text-lg">EASYCERT</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <span class="text-gray-200">
+        <i class="fas fa-user-circle mr-1"></i> Hola, {{ user.nombres }}
+      </span>
+      <a href="{% url 'logout' %}" class="px-3 py-1 rounded border border-gray-400 text-gray-200 hover:bg-gray-700">
+        <i class="fas fa-sign-out-alt mr-1"></i> Cerrar Sesión
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenido -->
+  <main class="flex-1 container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md">
+
+      <!-- Header card -->
+      <div class="flex justify-between items-center border-b px-4 py-3">
+        <h4 class="font-semibold text-gray-700 flex items-center gap-2">
+          <i class="fas fa-file-alt text-blue-600"></i> Solicitudes de Constancias
+        </h4>
+        <div class="flex items-center gap-3">
+          <span class="bg-blue-600 text-white text-xs sm:text-sm px-2 py-1 rounded">{{ solicitudes|length }} solicitudes</span>
+          <button id="abrirFormularioBtn"
+                  class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs sm:text-sm flex items-center gap-1">
+            <i class="fas fa-plus-circle"></i> Solicitar constancia
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="overflow-x-auto max-h-[500px]">
+        <table class="w-full text-sm text-left table-auto">
+          <thead class="bg-gray-800 text-gray-100">
+            <tr>
+              <th class="px-4 py-2">Usuario</th>
+              <th class="px-4 py-2">Documento</th>
+              <th class="px-4 py-2">Estado</th>
+              <th class="px-4 py-2">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in solicitudes %}
+            <tr class="border-b hover:bg-gray-50 solicitud-row"
+                data-tipo="{{ s.tipo }}"
+                data-estado="{{ s.estado }}"
+                data-fecha="{{ s.creado_en|date:'Y-m-d' }}">
+              <td class="px-4 py-2">{{ s.usuario.nombres }} {{ s.usuario.apellidos }}</td>
+              <td class="px-4 py-2">{{ s.usuario.numero_documento }}</td>
+              <td class="px-4 py-2">
+                <span class="px-2 py-1 rounded text-xs font-medium
+                  {% if s.estado == 'pendiente' %} bg-yellow-200 text-yellow-800
+                  {% elif s.estado == 'aprobado' %} bg-green-200 text-green-800
+                  {% elif s.estado == 'rechazado' %} bg-red-200 text-red-800
+                  {% else %} bg-gray-200 text-gray-800 {% endif %}">
+                  {{ s.get_estado_display }}
+                </span>
+              </td>
+              <td class="px-4 py-2">
+                <a href="#"
+                   class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded flex items-center gap-1">
+                  <i class="fas fa-file-download"></i> Descargar PDF
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="px-4 py-6 text-center text-gray-500">
+                <i class="fas fa-folder-open text-2xl mb-2"></i>
+                <div>No hay solicitudes de constancias.</div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<!-- Modal Tailwind centrado y responsivo -->
+<div id="formularioModal"
+     class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 sm:p-6">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-lg md:max-w-xl p-6 sm:p-8 relative border border-gray-200 transition-all duration-300 transform scale-100">
+    
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-5 border-b pb-3">
+      <h5 class="text-xl font-semibold text-gray-800 flex items-center">
+        <i class="fas fa-plus-circle text-blue-600 mr-2"></i>
+        Solicitar Constancia
+      </h5>
+      <button type="button"
+              class="text-gray-500 hover:text-red-600 text-2xl leading-none focus:outline-none"
+              data-close="modal">
+        ✖
+      </button>
+    </div>
+
+    <!-- Contenido dinámico -->
+    <div id="modalFormularioContenido" class="space-y-4 overflow-y-auto max-h-[70vh]">
+      <!-- Aquí se inyecta el formulario por AJAX -->
+      <p class="text-gray-500 text-center">Cargando...</p>
+    </div>
+
+  </div>
+</div>
+
+<script src="{% static 'js/user_dashboard.js' %}"></script>
+
+{% endblock %}

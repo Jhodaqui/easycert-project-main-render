@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mx-auto flex justify-center items-center min-h-screen px-4">
+  <div class="card shadow-lg border-0 rounded-lg p-6 w-full max-w-sm sm:max-w-md md:max-w-lg" style="max-width: 400px;">
+    
+    <!-- Logo -->
+    <div class="flex justify-center mb-4">
+      <img src="{% static 'img/sena-logo.png' %}" alt="Logo EasyCert" class="img-fluid" style="max-height: 80px;">
+    </div>
+
+    <h4 class="text-center text-2xl font-semibold mb-6">INICIA SESIÓN</h4>
+
+    <!-- Error general -->
+    {% if field_errors.general %}
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      <div>{{ field_errors.general }}</div>
+    </div>
+    {% endif %}
+
+    <!-- Formulario -->
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+
+      <!-- Email -->
+      <div class="mb-4 position-relative">
+        <label for="id_email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+        <input type="email" class="form-control ps-5 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400" id="id_email" name="email" placeholder="Correo electrónico" value="{{ form.email.value|default:'' }}" required>
+        <i class="fas fa-envelope position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+        {% if form.email.errors %}
+          <div class="text-red-500 text-sm mt-1">{{ form.email.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4 position-relative">
+        <label for="id_password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input type="password" class="form-control ps-5 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400" id="id_password" name="password" placeholder="Contraseña" value="{{ form.password.value|default:'' }}" required>
+        <i class="fas fa-lock position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+        {% if form.password.errors %}
+          <div class="text-red-500 text-sm mt-1">{{ form.password.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Botón -->
+      <div class="d-grid mb-4">
+        <button type="submit" class="btn btn-primary w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+          <i class="fas fa-sign-in-alt me-2"></i>Ingresar
+        </button>
+      </div>
+    </form>
+
+    <!-- Links -->
+    <div class="flex justify-center mt-4 space-x-2">
+      <a href="{% url 'register' %}" class="text-blue-500 hover:text-blue-700 text-sm">
+        <i class="fas fa-user-plus me-1"></i>Registrarse
+      </a>
+      <span class="text-muted">|</span>
+      <a href="{% url 'password_reset' %}" class="text-blue-500 hover:text-blue-700 text-sm">
+        <i class="fas fa-key me-1"></i>¿Olvidaste tu contraseña?
+      </a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

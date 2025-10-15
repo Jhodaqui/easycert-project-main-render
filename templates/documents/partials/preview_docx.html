@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-4">
+  <div class="border rounded p-3 max-h-[60vh] overflow-auto bg-white">
+    {{ html_content|safe }}
+  </div>
+
+  <div class="flex items-center gap-3 mt-2">
+    <label for="fecha_expedicion_input" class="block text-sm font-medium text-gray-700">Fecha de expedición</label>
+    <input id="fecha_expedicion_input" type="text" placeholder="Ej: Bogotá, 1 de octubre de 2025"
+           class="border rounded px-2 py-1 w-1/2">
+    <button id="btnSaveFecha" type="button"
+            onclick="window.__saveFechaPreview && window.__saveFechaPreview('{{ filename }}')"
+            class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
+      💾 Guardar fecha
+    </button>
+  </div>
+</div>

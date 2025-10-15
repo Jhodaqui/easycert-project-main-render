@@ -1,0 +1,55 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}EasyCert{% endblock %}</title>
+
+  <!-- Tailwind compilado -->
+  <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
+
+  <!-- Font Awesome (íconos) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- docx-preview (CSS + JSZip + librería principal) -->
+  <link rel="stylesheet" href="{% static 'libs/docx-preview/dist/docx-preview.css' %}">
+
+  <!-- JSZip debe ir primero -->
+  <script src="{% static 'libs/jszip/dist/jszip.min.js' %}"></script>
+  <script>
+    // Forzar que esté en global (por si la build de docx-preview lo necesita)
+    window.JSZip = window.JSZip || JSZip;
+  </script>
+
+  <!-- Luego la librería principal -->
+  <script src="{% static 'libs/docx-preview/dist/docx-preview.min.js' %}"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 antialiased">
+
+  <!-- Mensajes Django -->
+  {% if messages %}
+    <div class="container mx-auto px-4 py-3">
+      {% for message in messages %}
+        <div class="mb-2 p-3 rounded-md bg-white shadow-sm">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Contenido dinámico -->
+  {% block content %}{% endblock %}
+
+  <!-- Alpine global -->
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+  <!-- Bloque extra para JS específico de cada vista -->
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container mx-auto flex justify-center items-center min-h-screen px-4 bg-light">
+  <div class="card shadow-lg border-0 rounded-lg p-6 w-full max-w-3xl">
+    
+    <h3 class="text-center text-2xl font-semibold mb-6">Registro</h3>
+
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <!-- Nombres y Apellidos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <div class="mb-3">
+            {{ form.nombres.label_tag }}
+            {{ form.nombres }}
+            {% if form.nombres.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.nombres.errors }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-3">
+            {{ form.apellidos.label_tag }}
+            {{ form.apellidos }}
+            {% if form.apellidos.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.apellidos.errors }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Documento -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <div class="mb-3">
+            {{ form.tipo_documento.label_tag }}
+            {{ form.tipo_documento }}
+            {% if form.tipo_documento.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.tipo_documento.errors }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-3">
+            {{ form.numero_documento.label_tag }}
+            {{ form.numero_documento }}
+            {% if form.numero_documento.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.numero_documento.errors }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Selects dinámicos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <div class="mb-3">
+            {{ form.departamento.label_tag }}
+            {{ form.departamento }}
+            {% if form.departamento.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.departamento.errors }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-3">
+            {{ form.centro.label_tag }}
+            {{ form.centro }}
+            {% if form.centro.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.centro.errors }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <div class="mb-3">
+          {{ form.email.label_tag }}
+          {{ form.email }}
+          {% if form.email.errors %}
+            <div class="text-red-500 text-sm mt-1">{{ form.email.errors }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <div class="mb-3">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.password1.errors }}</div>
+            {% endif %}
+            <div class="text-sm text-gray-500"><i class="fas fa-info-circle me-1"></i>Mínimo 8 caracteres, con letras y números</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-3">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.password2.errors }}</div>
+            {% endif %}
+            <div class="text-sm text-gray-500"><i class="fas fa-info-circle me-1"></i>Repite la misma contraseña</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <div>
+        <div class="d-grid mb-4">
+          <button type="submit" class="btn btn-success w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">
+            <i class="fas fa-user-plus me-2"></i>Registrarse
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Link login -->
+    <div class="text-center mt-3">
+      <p class="mb-0">
+        <a href="{% url 'login' %}" class="text-blue-500 hover:text-blue-700">
+          <i class="fas fa-sign-in-alt me-1"></i>¿Ya tienes cuenta? Inicia sesión
+        </a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- Script para selects dinámicos -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const deptoSelect = document.getElementById("id_departamento");
+        const centroSelect = document.getElementById("id_centro");
+
+        deptoSelect.addEventListener("change", function() {
+            const deptoId = this.value;
+            if (deptoId) {
+                fetch(`/users/cargar-centros/?departamento=${deptoId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        centroSelect.innerHTML = '<option value="">-- Selecciona un centro --</option>';
+                        data.forEach(item => {
+                            const option = document.createElement("option");
+                            option.value = item.idMpio;
+                            option.textContent = item.nombreCentro;
+                            centroSelect.appendChild(option);
+                        });
+                    });
+            } else {
+                centroSelect.innerHTML = '<option value="">-- Selecciona un centro --</option>';
+            }
+        });
+    });
+</script>
+
+{% endblock %}

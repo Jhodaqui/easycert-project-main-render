@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}>
+
+<div class="invalid-link-container">
+    <div class="invalid-link-icon">
+        <i class="fas fa-exclamation-circle"></i>
+    </div>
+    
+    <h2 class="invalid-link-title">Enlace no válido</h2>
+    
+    <p class="invalid-link-text">
+        El enlace de activación no es válido o ha expirado.
+    </p>
+    
+    <a href="{% url 'resend_activation' %}" class="resend-link">
+        <i class="fas fa-paper-plane"></i>Reenviar activación
+    </a>
+    
+    <p class="support-text">
+        Si continúas teniendo problemas, contacta con soporte técnico.
+    </p>
+</div>
+
+
+{% endblock %}
+
+{% comment %} {% extends "base.html" %}
+{% block content %}
+<h2>Enlace no válido</h2>
+<p>El enlace de activación no es válido o ha expirado.</p>
+<p><a href="{% url 'resend_activation' %}">Reenviar activación</a></p>
+{% endblock %} {% endcomment %}

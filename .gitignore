@@ -1,0 +1,5 @@
+# Ignorar pycache
+__pycache__/
+*.py[cod]
+.env
+/media/

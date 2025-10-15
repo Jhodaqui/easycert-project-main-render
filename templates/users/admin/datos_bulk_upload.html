@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Cargar Datos Masivos (Usuarios o Municipios)</h3>
+<form method="post" enctype="multipart/form-data" class="mb-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Subir Archivo</button>
+</form>
+
+<div class="alert alert-info">
+    <strong>Consejo:</strong> Este formulario acepta **dos tipos de archivos**:<br><br>
+    <b>Usuarios:</b> columnas <code>nombres</code>, <code>apellidos</code>, <code>tipo_documento</code>, 
+    <code>numero_documento</code>, <code>email</code>, <code>password</code>.<br>
+    Ejemplo:
+    <pre>
+nombres,apellidos,tipo_documento,numero_documento,email,password
+Juan,Pérez,CC,12345678,juan.perez@sena.edu.co,clave123
+María,Gómez,TI,98765432,maria.gomez@sena.edu.co,clave456
+    </pre>
+
+    <b>Municipios:</b> columnas <code>nombreMpio</code>, <code>idDepto</code>, <code>nombreCentro</code>.<br>
+    Ejemplo:
+    <pre>
+nombreMpio,idDepto,nombreCentro
+Leticia,91,Centro para la Biodiversidad y el Turismo
+Caldas,5,Centro de los Recursos Naturales Renovables
+Itagüí,5,Centro del Diseño y Manufactura del Cuero
+    </pre>
+</div>
+
+<hr>
+
+<!-- Usuarios -->
+<h3>Usuarios existentes</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Documento</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ user.nombres }}</td>
+            <td>{{ user.apellidos }}</td>
+            <td>{{ user.tipo_documento }} {{ user.numero_documento }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No hay usuarios registrados</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+
+<!-- Municipios -->
+<h3>Municipios existentes</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Municipio</th>
+            <th>Departamento</th>
+            <th>Centro</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for municipio in municipios %}
+        <tr>
+            <td>{{ municipio.nombreMpio }}</td>
+            <td>{{ municipio.idDepto.nombreDepto }}</td>
+            <td>{{ municipio.nombreCentro }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No hay municipios cargados</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

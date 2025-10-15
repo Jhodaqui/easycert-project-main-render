@@ -1,0 +1,45 @@
+<div class="overflow-x-auto rounded-lg shadow">
+  <table class="min-w-full text-sm text-left text-gray-700">
+    <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+      <tr>
+        <th class="px-4 py-2 w-10">
+          <input type="checkbox" id="selectAllContratos" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+        </th>
+        <th class="px-4 py-2">Fecha Contrato</th>
+        <th class="px-4 py-2">Número</th>
+        <th class="px-4 py-2 text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      {% for contrato in contratos %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2">
+            <input type="checkbox" 
+                   class="contrato-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
+                   value="{{ contrato.id }}">
+          </td>
+          <td class="px-4 py-2">{{ contrato.fecha_inicio }}</td>
+          <td class="px-4 py-2 font-medium text-gray-800">{{ contrato.numero_contrato }}</td>
+          <td class="px-4 py-2 flex justify-center gap-2">
+            <button type="button" 
+                    class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition ver-detalle" 
+                    data-id="{{ contrato.id }}">
+              Ver
+            </button>
+            <button type="button"
+                    class="px-3 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition generar-pdf"
+                    data-id="{{ contrato.id }}">
+              📄 PDF
+            </button>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" class="px-4 py-6 text-center text-gray-500 italic">
+            No hay contratos registrados.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

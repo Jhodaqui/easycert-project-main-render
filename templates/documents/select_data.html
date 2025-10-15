@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-container">
+        <img src="/static/img/EasyCert" alt="EasyCert Logo" class="logo-img">
+        <span class="logo-text">EASYCERT</span>
+      </div>
+    </div>
+    <div class="user-info">
+      <span class="welcome-text">Procesar datos de {{ usuario.nombre_completo }}</span>
+      <a href="{% url 'logout' %}" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>Salir
+      </a>
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <div class="content">
+    <div class="solicitudes">
+      <div class="solicitudes-header">
+        <h2>Datos extraídos del PDF</h2>
+        <p>Marca los que quieras guardar para {{ usuario.nombre_completo }}.</p>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <table border="1" cellpadding="5" cellspacing="0" width="100%">
+          <thead>
+            <tr>
+              <th>Seleccionar</th>
+              <th>Clave</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in temp_data %}
+            <tr>
+              <td>
+                <input type="checkbox" name="selected" value="{{ item.id }}">
+              </td>
+              <td>{{ item.clave }}</td>
+              <td>{{ item.valor }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3">
+                <p>No se encontraron datos en el PDF.</p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div style="margin-top: 20px;">
+          <button type="submit" class="btn-generar">
+            <i class="fas fa-save"></i> Guardar selección y continuar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

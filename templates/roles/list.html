@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="d-flex" style="min-height: 100vh;">
+
+    <!-- Barra lateral -->
+    <aside class="bg-dark text-white p-3" style="width: 250px;">
+        <h4 class="mb-4">⚙️ Administración</h4>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-white">📊 Mas opciones</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-white">👥 Roles</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-white">📂 Permisos</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="{% url 'logout' %}" class="nav-link text-danger">🚪 Cerrar sesión</a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Contenido -->
+    <main class="flex-grow-1 p-4">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="fw-bold">Gestión de Roles</h1>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h3 class="fw-bold">{{ users|length }}</h3>
+                        <p class="text-muted">Usuarios Totales</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h3 class="fw-bold">{{ users.is_superuser|length }}</h3>
+                        <p class="text-muted">Administradores</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h3 class="fw-bold">{{ users.roles.staff|length }}</h3>
+                        <p class="text-muted">Staff</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h3 class="fw-bold">{{ users.roles.user|length }}</h3>
+                        <p class="text-muted">Usuarios</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        {% if users %}
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                Lista de Usuarios
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Rol actual</th>
+                            <th>Cambiar rol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>{{ u.username }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {% if u.role == "user" %}Usuario{% endif %}
+                                    {% if u.role == "staff" %}Staff{% endif %}
+                                    {% if u.role == "admin" %}Admin{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <form method="post" class="d-flex align-items-center gap-2">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="user_id" value="{{ u.id }}">
+                                    <select name="role" class="form-select form-select-sm" style="width:150px;">
+                                        <option value="user" {% if u.role == "user" %}selected{% endif %}>Usuario</option>
+                                        <option value="staff" {% if u.role == "staff" %}selected{% endif %}>Staff</option>
+                                        <option value="admin" {% if u.role == "admin" %}selected{% endif %}>Admin</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Actualizar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-warning mt-4">No hay usuarios registrados en el sistema.</div>
+        {% endif %}
+
+    </main>
+</div>
+{% endblock %}
